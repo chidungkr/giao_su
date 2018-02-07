@@ -49,6 +49,11 @@ prof2 %<>% mutate(birth_date = dmy(birth_date),
                   birth_year = year(birth_date), 
                   age = 2018 - birth_year)
 
+prof2 %>% 
+  arrange(birth_date) %>% 
+  #filter(!is.na(birth_date)) %>% 
+  tail(25)
+
 # Tuổi trung bình của  các phó GS theo giới tính
 # có thể  thấy các PGS nữ  trẻ hơn đồng nghiệp nam: 
 prof2 %>% 
@@ -153,6 +158,21 @@ prof2 %>%
   geom_text(aes(label = n), hjust = 1.2, color = "white") + 
   labs(x = NULL, y = NULL, 
        title = "The Number of of Associate Professors by Birth Place", 
+       caption = "Data Source: http://www.hdcdgsnn.gov.vn")
+
+# Top 30 trường có nhiều PGS được  phong nhất: 
+prof2 %>% 
+  group_by(organization) %>% 
+  count() %>% 
+  ungroup() %>% 
+  arrange(-n) %>% 
+  slice(1:30) %>% 
+  ggplot(aes(reorder(organization, n), n)) + 
+  geom_col() + 
+  coord_flip() + 
+  geom_text(aes(label = n), hjust = 1.2, color = "white") + 
+  labs(x = NULL, y = NULL, 
+       title = "The Number of of Associate Professors by Organization", 
        caption = "Data Source: http://www.hdcdgsnn.gov.vn")
   
 
